@@ -50,18 +50,26 @@ class _MyHomePageState extends State<MyHomePage> {
 typedef BurstMenuItemClick = bool? Function(int index);
 
 class BurstMenu extends StatefulWidget {
-  final double swapAngle;
-  final double startAngle;
   final List<Widget> menus;
   final Widget center;
+  final double radius;
+  final double swapAngle;
+  final double startAngle;
+  final double hideOpacity;
+  final Duration duration;
+  final Curve curve;
   final bool itemClickClose;
   final BurstMenuItemClick? burstMenuItemClick;
   const BurstMenu({
     super.key,
     required this.center,
     required this.menus,
+    this.radius = 100,
     this.swapAngle = 360,
     this.startAngle = -90,
+    this.hideOpacity = 0,
+    this.curve = Curves.ease,
+    this.duration = const Duration(milliseconds: 300),
     this.burstMenuItemClick,
     this.itemClickClose = true,
   });
@@ -72,6 +80,7 @@ class BurstMenu extends StatefulWidget {
 
 class _BurstMenuState extends State<BurstMenu> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  late Animation<double> _animation;
   // 是否已关闭
   bool _closed = true;
 
@@ -102,9 +111,10 @@ class _BurstMenuState extends State<BurstMenu> with SingleTickerProviderStateMix
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: widget.duration,
       vsync: this,
     );
+    _animation = CurvedAnimation(parent: _controller, curve: widget.curve);
   }
 
   @override
@@ -117,9 +127,10 @@ class _BurstMenuState extends State<BurstMenu> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     return Flow(
       delegate: _CircleFlowDelegate(
-        _controller,
+        _animation,
         swapAngle: widget.swapAngle,
         startAngle: widget.startAngle,
+        hideOpacity: widget.hideOpacity,
       ),
       children: [
         ...widget.menus.asMap().keys.map((index) => GestureDetector(
@@ -140,12 +151,14 @@ class _BurstMenuState extends State<BurstMenu> with SingleTickerProviderStateMix
 class _CircleFlowDelegate extends FlowDelegate {
   final double swapAngle;
   final double startAngle;
+  final double hideOpacity;
   final Animation<double> animation;
 
   _CircleFlowDelegate(
     this.animation, {
     this.swapAngle = 360,
     this.startAngle = -90,
+    this.hideOpacity = 0.3,
   }) : super(repaint: animation);
   //绘制孩子的方法
   @override

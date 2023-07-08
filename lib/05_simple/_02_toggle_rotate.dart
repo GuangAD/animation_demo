@@ -76,7 +76,7 @@ class ToggleRotate extends StatefulWidget {
   final VoidCallback? onTap;
   final double beginAngle;
   final double endAngle;
-  final Duration? duration;
+  final Duration duration;
 
   /// 是否顺时针旋转
   final bool clockwise;
@@ -90,21 +90,19 @@ class ToggleRotate extends StatefulWidget {
     this.endAngle = 90,
     this.clockwise = true,
     this.curve = Curves.fastOutSlowIn,
-    this.duration,
+    this.duration = const Duration(milliseconds: 200),
   });
 
   @override
   State<ToggleRotate> createState() => _ToggleRotateState();
 }
 
-const _kToggleRotateDuration = Duration(milliseconds: 200);
-
 class _ToggleRotateState extends State<ToggleRotate> with SingleTickerProviderStateMixin {
   bool _rotated = false; // 是否已旋转
   late AnimationController _controller; // 是否动画控制器
   late Animation<double> _rotateAnim; // 旋转动画器
 
-  Duration get _duration => widget.duration ?? _kToggleRotateDuration;
+  Duration get _duration => widget.duration;
   @override
   void initState() {
     _controller = AnimationController(vsync: this, duration: _duration);
