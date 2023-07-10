@@ -31,14 +31,15 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: const Center(
-        child: AnimText(),
+        child: AnimText(''),
       ),
     );
   }
 }
 
 class AnimText extends StatefulWidget {
-  const AnimText({super.key});
+  final String text;
+  const AnimText(this.text, {super.key});
 
   @override
   State<AnimText> createState() => _AnimTextState();
