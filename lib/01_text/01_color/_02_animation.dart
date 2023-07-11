@@ -37,30 +37,36 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
+const _kAnimTextColors = [
+  Color(0xFFF60C0C),
+  Color(0xFFF3B913),
+  Color(0xFFE7F716),
+  Color(0xFF3DF30B),
+  Color(0xFF0DF6EF),
+  Color(0xFF0829FB),
+  Color(0xFFB709F4)
+];
+
+const _kAnimTextStyle = TextStyle(fontSize: 18);
+
 class AnimText extends StatefulWidget {
   final String text;
-  const AnimText(this.text, {super.key});
+  final List<Color>? colors;
+  final TextStyle? style;
+  const AnimText(this.text, {this.colors, this.style, super.key});
 
   @override
   State<AnimText> createState() => _AnimTextState();
 }
 
 class _AnimTextState extends State<AnimText> with SingleTickerProviderStateMixin {
-  final String _text = "张风捷特烈";
+  List<Color> get _colors => widget.colors ?? _kAnimTextColors;
+
+  TextStyle get _style => widget.style ?? _kAnimTextStyle;
+
+  List<double> get _pos => List.generate(_colors.length, (index) => (index + 1) / _colors.length);
   late AnimationController _ctrl;
   final Duration _animDuration = const Duration(milliseconds: 1000); // 动画时长
-
-  final List<Color> _colors = const [
-    Color(0xFFF60C0C),
-    Color(0xFFF3B913),
-    Color(0xFFE7F716),
-    Color(0xFF3DF30B),
-    Color(0xFF0DF6EF),
-    Color(0xFF0829FB),
-    Color(0xFFB709F4),
-  ];
-
-  final List<double> _pos = const [1.0 / 7, 2.0 / 7, 3.0 / 7, 4.0 / 7, 5.0 / 7, 6.0 / 7, 1.0];
 
   @override
   void initState() {
@@ -113,8 +119,8 @@ class _AnimTextState extends State<AnimText> with SingleTickerProviderStateMixin
 
   Widget _buildByAnim(BuildContext context, Widget? child) {
     return Text(
-      _text,
-      style: TextStyle(fontSize: 60, foreground: getPaint()),
+      widget.text,
+      style: _style.copyWith(foreground: getPaint()),
     );
   }
 

@@ -31,32 +31,35 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: const Center(
-        child: AnimText('天地玄黄'),
+        child: AnimText('一二三四五六七八九十'),
       ),
     );
   }
 }
 
+const _kAnimTextColors = [
+  Color(0xFFF60C0C),
+  Color(0xFFF3B913),
+  Color(0xFFE7F716),
+  Color(0xFF3DF30B),
+  Color(0xFF0DF6EF),
+  Color(0xFF0829FB),
+  Color(0xFFB709F4)
+];
+
+const _kAnimTextStyle = TextStyle(fontSize: 18);
+
 class AnimText extends StatelessWidget {
   final String text;
   final List<Color>? colors;
-  const AnimText(this.text, {this.colors, super.key});
+  final TextStyle? style;
+  const AnimText(this.text, {this.colors, this.style, super.key});
 
-  String get _text => text;
+  List<Color> get _colors => colors ?? _kAnimTextColors;
 
-  List<Color> get _colors =>
-      colors ??
-      const [
-        Color(0xFFF60C0C),
-        Color(0xFFF3B913),
-        Color(0xFFE7F716),
-        Color(0xFF3DF30B),
-        Color(0xFF0DF6EF),
-        Color(0xFF0829FB),
-        Color(0xFFB709F4),
-      ];
+  TextStyle get _style => style ?? _kAnimTextStyle;
 
-  final List<double> _pos = const [1.0 / 7, 2.0 / 7, 3.0 / 7, 4.0 / 7, 5.0 / 7, 6.0 / 7, 1.0];
+  List<double> get _pos => List.generate(_colors.length, (index) => (index + 1) / _colors.length);
 
   Paint getPaint() {
     Paint paint = Paint();
@@ -84,8 +87,8 @@ class AnimText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      _text,
-      style: TextStyle(fontSize: 60, foreground: getPaint()),
+      text,
+      style: _style.copyWith(foreground: getPaint()),
     );
   }
 }
