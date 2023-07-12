@@ -48,12 +48,14 @@ const _kAnimTextColors = [
 ];
 
 const _kAnimTextStyle = TextStyle(fontSize: 18);
+const _kAnimateDuration = Duration(milliseconds: 1000);
 
 class AnimText extends StatefulWidget {
   final String text;
   final List<Color>? colors;
   final TextStyle? style;
-  const AnimText(this.text, {this.colors, this.style, super.key});
+  final Duration? duration;
+  const AnimText(this.text, {this.colors, this.style, super.key, this.duration});
 
   @override
   State<AnimText> createState() => _AnimTextState();
@@ -65,21 +67,26 @@ class _AnimTextState extends State<AnimText> with SingleTickerProviderStateMixin
   TextStyle get _style => widget.style ?? _kAnimTextStyle;
 
   List<double> get _pos => List.generate(_colors.length, (index) => (index + 1) / _colors.length);
-  late AnimationController _ctrl;
-  final Duration _animDuration = const Duration(milliseconds: 1000); // 动画时长
+  late final AnimationController _ctrl =
+      AnimationController(vsync: this, duration: widget.duration ?? _kAnimateDuration);
 
   @override
   void initState() {
     super.initState();
-    // 1. 声明动画器对象
-    _ctrl = AnimationController(vsync: this, duration: _animDuration);
   }
 
   @override
   void dispose() {
-    // 1. 销毁动画器
     _ctrl.dispose();
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant AnimText oldWidget) {
+    if (widget.duration != oldWidget.duration) {
+      _ctrl.duration = widget.duration ?? _kAnimateDuration;
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   Paint getPaint() {
