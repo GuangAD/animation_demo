@@ -40,30 +40,29 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
+const _kAnimateDuration = Duration(milliseconds: 1000);
+
 class TextTyper extends StatefulWidget {
   final String text;
-  const TextTyper(this.text, {super.key});
+  final Duration? duration;
+  const TextTyper(this.text, {this.duration, super.key});
 
   @override
   State<TextTyper> createState() => _TextTyperState();
 }
 
 class _TextTyperState extends State<TextTyper> with SingleTickerProviderStateMixin {
-  final Duration _animDuration = const Duration(milliseconds: 200);
-
-  late final String _text;
-
   final ValueNotifier<String> data = ValueNotifier<String>("");
 
   Timer? _timer;
   int currentIndex = 0;
 
-  String get currentText => _text.substring(0, currentIndex);
+  String get currentText => widget.text.substring(0, currentIndex);
 
+  Duration get _animDuration => widget.duration ?? _kAnimateDuration;
   @override
   void initState() {
     super.initState();
-    _text = widget.text;
     _startAnim();
   }
 
@@ -82,7 +81,7 @@ class _TextTyperState extends State<TextTyper> with SingleTickerProviderStateMix
   }
 
   void _type(Timer timer) {
-    if (currentIndex < _text.length) {
+    if (currentIndex < widget.text.length) {
       currentIndex++;
       data.value = currentText;
     } else {

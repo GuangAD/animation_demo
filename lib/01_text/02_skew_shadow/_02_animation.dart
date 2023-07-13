@@ -30,33 +30,34 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: const Center(
-        child: SkewShadowText(),
+        child: SkewShadowText('一二三四五六七八九十'),
       ),
     );
   }
 }
 
+const _kAnimateDuration = Duration(milliseconds: 1000);
+
 class SkewShadowText extends StatefulWidget {
-  const SkewShadowText({super.key});
+  final String text;
+  final Duration? duration;
+  const SkewShadowText(this.text, {this.duration, super.key});
 
   @override
   State<SkewShadowText> createState() => _SkewShadowTextState();
 }
 
 class _SkewShadowTextState extends State<SkewShadowText> with SingleTickerProviderStateMixin {
-  late AnimationController _ctrl;
+  late final AnimationController _ctrl =
+      AnimationController(vsync: this, duration: widget.duration ?? _kAnimateDuration);
 
-  final Duration animDuration = const Duration(milliseconds: 800);
   final TextStyle _commonStyle = const TextStyle(fontSize: 60, color: Colors.blue);
 
   final TextStyle _shadowStyle = TextStyle(fontSize: 60, color: Colors.blue.withAlpha(88));
 
-  final String _text = '张风捷特烈';
-
   @override
   void initState() {
     super.initState();
-    _ctrl = AnimationController(vsync: this, duration: animDuration);
   }
 
   @override
@@ -66,13 +67,21 @@ class _SkewShadowTextState extends State<SkewShadowText> with SingleTickerProvid
   }
 
   @override
+  void didUpdateWidget(covariant SkewShadowText oldWidget) {
+    if (widget.duration != oldWidget.duration) {
+      _ctrl.duration = widget.duration ?? _kAnimateDuration;
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: _startAnim,
       child: Stack(
         children: [
           Text(
-            _text,
+            widget.text,
             style: _commonStyle,
           ),
           AnimatedBuilder(
@@ -86,7 +95,7 @@ class _SkewShadowTextState extends State<SkewShadowText> with SingleTickerProvid
 
   double get rad => 6 * (_ctrl.value) / 180 * pi;
 
-  Widget _buildByAnim(_, __) => Transform(transform: Matrix4.skewX(rad), child: Text(_text, style: _shadowStyle));
+  Widget _buildByAnim(_, __) => Transform(transform: Matrix4.skewX(rad), child: Text(widget.text, style: _shadowStyle));
 
   void _startAnim() {
     _ctrl.forward(from: 0);

@@ -30,31 +30,31 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: Center(
-        child: SkewShadowText(),
+        child: SkewShadowText('一二三四五六七八九十'),
       ),
     );
   }
 }
 
 class SkewShadowText extends StatelessWidget {
-  SkewShadowText({super.key});
+  final String text;
+  SkewShadowText(this.text, {super.key});
 
   final TextStyle _commonStyle = const TextStyle(fontSize: 60, color: Colors.blue);
   final TextStyle _shadowStyle = TextStyle(fontSize: 60, color: Colors.blue.withAlpha(88));
-  final String _text = '张风捷特烈';
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Text(
-          _text,
+          text,
           style: _commonStyle,
         ),
         Transform(
           transform: Matrix4.skewX(4 * pi / 180),
           child: Text(
-            _text,
+            text,
             style: _shadowStyle,
           ),
         ),

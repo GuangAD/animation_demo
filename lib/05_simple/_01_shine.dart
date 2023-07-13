@@ -63,15 +63,12 @@ class CircleShineImage extends StatefulWidget {
 }
 
 class _CircleShineImageState extends State<CircleShineImage> with SingleTickerProviderStateMixin {
-  late AnimationController _ctrl; // 声明：动画控制器
+  late final AnimationController _ctrl = AnimationController(vsync: this, duration: widget.duration); // 声明：动画控制器
   late Animation<double> _blurRadiusAnim; // 声明：阴影半径动画器
 
   @override
   void initState() {
-    _ctrl = AnimationController(
-      vsync: this,
-      duration: widget.duration,
-    )..addListener(_handleAnimationChanged);
+    _ctrl.addListener(_handleAnimationChanged);
 
     // 实例化:阴影半径动画器
     _blurRadiusAnim =
@@ -79,6 +76,16 @@ class _CircleShineImageState extends State<CircleShineImage> with SingleTickerPr
 
     _ctrl.repeat(reverse: true);
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant CircleShineImage oldWidget) {
+    _ctrl.duration = widget.duration;
+    if (widget.curve != oldWidget.curve || widget.maxBlurRadius != oldWidget.maxBlurRadius) {
+      _blurRadiusAnim =
+          Tween<double>(begin: 0, end: widget.maxBlurRadius).chain(CurveTween(curve: widget.curve)).animate(_ctrl);
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
