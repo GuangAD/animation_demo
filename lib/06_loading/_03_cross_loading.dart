@@ -57,7 +57,7 @@ class _RotateLoadingState extends State<RotateLoading> with SingleTickerProvider
       vsync: this,
       duration: const Duration(seconds: 2),
     );
-    // _ctrl.repeat();
+    _ctrl.repeat();
   }
 
   @override
@@ -92,8 +92,8 @@ class CrossLoadingPainter extends CustomPainter {
 
     canvas.translate(size.width / 2, size.height / 2);
 
-    final double begin = -size.height / 2 + itemWidth / sqrt(pi / 2);
-    final double end = size.height / 2 - itemWidth / sqrt(pi / 2) + 20.0;
+    final double begin = itemWidth / sqrt(pi / 2);
+    final double end = -size.height / 2 + itemWidth / sqrt(pi / 2);
 
     drawItem(canvas, begin, end, _colors[0], true);
     drawItem(canvas, -begin, -end, _colors[1], true);
