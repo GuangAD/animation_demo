@@ -99,13 +99,12 @@ class ToggleRotate extends StatefulWidget {
 
 class _ToggleRotateState extends State<ToggleRotate> with SingleTickerProviderStateMixin {
   bool _rotated = false; // 是否已旋转
-  late AnimationController _controller; // 是否动画控制器
+  late AnimationController _controller = AnimationController(vsync: this, duration: _duration); // 是否动画控制器
   late Animation<double> _rotateAnim; // 旋转动画器
 
   Duration get _duration => widget.duration;
   @override
   void initState() {
-    _controller = AnimationController(vsync: this, duration: _duration);
     _initTweenAnim();
     super.initState();
   }
