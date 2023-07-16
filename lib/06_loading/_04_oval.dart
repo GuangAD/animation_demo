@@ -33,7 +33,7 @@ class MyHomePage extends StatelessWidget {
         child: SizedBox(
           width: 200,
           height: 200,
-          child: OvalLoading(),
+          child: OvalLoading(150),
         ),
       ),
     );
@@ -42,11 +42,10 @@ class MyHomePage extends StatelessWidget {
 
 class OvalLoading extends StatefulWidget {
   final double size;
-
-  const OvalLoading({Key? key, this.size = 150}) : super(key: key);
+  const OvalLoading(this.size, {super.key});
 
   @override
-  _OvalLoadingState createState() => _OvalLoadingState();
+  State<OvalLoading> createState() => _OvalLoadingState();
 }
 
 class _OvalLoadingState extends State<OvalLoading> with SingleTickerProviderStateMixin {
@@ -60,7 +59,7 @@ class _OvalLoadingState extends State<OvalLoading> with SingleTickerProviderStat
       vsync: this,
       duration: const Duration(seconds: 2),
     );
-    animation = Tween<double>(begin: -pi, end: pi).animate(_ctrl);
+    animation = Tween<double>(begin: 0, end: pi * 2).animate(_ctrl);
   }
 
   @override
@@ -109,6 +108,7 @@ class OvalLoadingPainter extends CustomPainter {
   double g(double t) => a * sin(t);
 
   void drawItem(Canvas canvas, double zoneSize, double rad, Color color) {
+    // 0 ~ 2*pi
     double x = (zoneSize - radius) * f(animation.value);
     double y = (zoneSize - radius) * g(animation.value);
 
