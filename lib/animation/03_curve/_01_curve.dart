@@ -1,5 +1,6 @@
-import 'package:exam/02/02_func/_00_anim_painter.dart';
 import 'package:flutter/material.dart';
+
+import '../02/02_func/_00_anim_painter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -85,10 +86,10 @@ class _AnimPanelState extends State<AnimPanel> with SingleTickerProviderStateMix
     )..addListener(_collectPoint);
     // CurvedAnimation 并不能启动动画，它很好地体现了: 我不创造数值，我只是数值的计算器。
     // 这样它必须要依附于别的动画器才能工作，也就是 parent 属性
-    // _curveAnim = CurvedAnimation(parent: _ctrl, curve: Curves.bounceOut);
-    // _curveAnim = CurvedAnimation(parent: _ctrl, curve: Curves.ease);
-    // _curveAnim = CurvedAnimation(parent: _ctrl, curve: Curves.decelerate);
-    // _curveAnim = CurvedAnimation(parent: _ctrl, curve: Curves.elasticOut);
+    // curveAnim = CurvedAnimation(parent: _ctrl, curve: Curves.bounceOut);
+    // curveAnim = CurvedAnimation(parent: _ctrl, curve: Curves.ease);
+    // curveAnim = CurvedAnimation(parent: _ctrl, curve: Curves.decelerate);
+    // curveAnim = CurvedAnimation(parent: _ctrl, curve: Curves.elasticOut);
     _curveAnim = CurvedAnimation(parent: _ctrl, curve: const SawTooth(3));
   }
 

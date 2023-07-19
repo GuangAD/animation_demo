@@ -87,9 +87,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 class SnowPainter extends CustomPainter {
   Animation ctrl;
   List<Snowflake>? _snowflakes;
-  SnowPainter(this.ctrl) : super(repaint: ctrl) {
-    print("object");
-  }
+  SnowPainter(this.ctrl) : super(repaint: ctrl);
 
   List<Snowflake> getSnowflakes(Size size) {
     return _snowflakes ??= List.generate(1000, (index) => Snowflake(width: size.width, height: size.height));
@@ -101,10 +99,10 @@ class SnowPainter extends CustomPainter {
     Paint paint = Paint()..color = Colors.white;
     canvas.drawCircle(Offset(size.width / 2, size.height - 200), 60, paint);
     canvas.drawOval(Rect.fromCenter(center: Offset(size.width / 2, size.height - 50), width: 200, height: 250), paint);
-    snowflakes.forEach((element) {
+    for (var element in snowflakes) {
       canvas.drawCircle(Offset(element.x, element.y), element.radius, paint);
       element.fall();
-    });
+    }
   }
 
   @override
